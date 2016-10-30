@@ -1,0 +1,11 @@
+# Build
+data-sync
+
+# Config
+config.yaml
+
+# OS File
+.DS_Store
+
+# Log
+log/*
