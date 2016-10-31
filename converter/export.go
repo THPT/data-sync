@@ -10,26 +10,11 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	_ "github.com/go-sql-driver/mysql"
-
-	"github.com/jmoiron/sqlx"
 )
 
 const (
 	delimiter = rune('	')
 )
-
-var srcDb *sqlx.DB
-
-func initDestionation() {
-	var err error
-	srcDb, err = openConnection(actionExport)
-	if err != nil {
-		fmt.Println("Can not connect to MySQL")
-		panic(err)
-	}
-}
 
 func Export(tableName string) {
 	// Read table config
@@ -38,7 +23,17 @@ func Export(tableName string) {
 		fmt.Println("Can not find table config")
 		return
 	}
-	initDestionation()
+
+	srcDb, err := openConnection(actionExport)
+	if err != nil {
+		fmt.Println("Can not connect to MySQL")
+		panic(err)
+	}
+	defer srcDb.Close()
+	err = srcDb.Ping()
+	if err != nil {
+		panic(err)
+	}
 
 	var columns []structure.ColumnStructure
 	json.Unmarshal(file, &columns)
@@ -60,13 +55,18 @@ func Export(tableName string) {
 		selectedStrs[i] = column.ColumnName
 	}
 	selectedParams := strings.Join(selectedStrs, ", ")
-	query = query + selectedParams + " FROM " + tableName + " LIMIT 10"
+	query = query + selectedParams + " FROM " + tableName
 
 	// fmt.Println("query:", query)
-	rows, err := srcDb.Queryx(query)
+	tx, err := srcDb.Beginx()
+	if err != nil {
+		panic(err)
+	}
+	rows, err := tx.Queryx(query)
 	if err != nil {
 		fmt.Println(query)
 		fmt.Println("Can not query data", err)
+		tx.Rollback()
 		return
 	}
 
@@ -74,6 +74,7 @@ func Export(tableName string) {
 	for rows.Next() {
 		row, err := rows.SliceScan()
 		if err != nil {
+			tx.Rollback()
 			panic(err)
 		}
 
@@ -81,6 +82,7 @@ func Export(tableName string) {
 		for i, col := range row {
 			val, err := ColumnToString(col)
 			if err != nil {
+				tx.Rollback()
 				panic(err)
 			}
 
@@ -93,6 +95,7 @@ func Export(tableName string) {
 		// 	fmt.Println(count)
 		// }
 	}
+	tx.Commit()
 
 	tsvWriter.Flush()
 	// fmt.Printf("[FINISH] Total %d line \n", count)

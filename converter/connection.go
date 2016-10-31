@@ -5,7 +5,9 @@ import (
 	"io/ioutil"
 	"path/filepath"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 
 	yaml "gopkg.in/yaml.v2"
 )

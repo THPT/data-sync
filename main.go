@@ -5,6 +5,6 @@ import (
 )
 
 func main() {
-	converter.Export("user")
-
+	// converter.Export("user")
+	converter.Import("user")
 }
