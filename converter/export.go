@@ -1,6 +1,7 @@
-package main
+package converter
 
 import (
+	"data-sync/structure"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -16,31 +17,30 @@ import (
 )
 
 const (
-	rowPerQuery = "10"
-	delimiter   = rune('	')
+	delimiter = rune('	')
 )
 
 var srcDb *sqlx.DB
 
 func initDestionation() {
 	var err error
-	srcDb, err = sqlx.Open("mysql", "grok:grok@/svcdb")
+	srcDb, err = openConnection(actionExport)
 	if err != nil {
 		fmt.Println("Can not connect to MySQL")
 		panic(err)
 	}
 }
 
-func export(tableName string) {
+func Export(tableName string) {
 	// Read table config
-	file, err := ioutil.ReadFile(fmt.Sprintf("./structure/%s.json", tableName))
+	file, err := ioutil.ReadFile(fmt.Sprintf("./config/tables/%s.json", tableName))
 	if err != nil {
 		fmt.Println("Can not find table config")
 		return
 	}
 	initDestionation()
 
-	var columns []ColumnStructure
+	var columns []structure.ColumnStructure
 	json.Unmarshal(file, &columns)
 
 	//Init writer

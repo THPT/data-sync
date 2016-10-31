@@ -1,4 +1,4 @@
-package main
+package structure
 
 type TableStructure struct {
 	Columns []ColumnStructure `json:"columns"`
