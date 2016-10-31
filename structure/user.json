@@ -1,4 +1,4 @@
-"columns": [{
+[{
     "column_name": "user_id",
     "data_type": "bigint"
 }, {
@@ -23,4 +23,4 @@
     "column_name": "modification",
     "data_type": "timestamp"
 }]
-}
+

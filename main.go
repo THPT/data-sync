@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 
@@ -45,7 +44,9 @@ func loads(filePath string) configuration {
 }
 
 func main() {
-	config := loads("./config/config.yaml")
-	fmt.Printf("%+v", config)
+	// config := loads("./config/config.yaml")
+	// fmt.Printf("%+v", config)
+
+	export("user")
 
 }
