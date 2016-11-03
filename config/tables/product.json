@@ -1,0 +1,37 @@
+[{
+    "column_name": "product_id",
+    "data_type": "varchar(50)"
+}, {
+    "column_name": "name",
+    "data_type": "varchar(250)"
+}, {
+    "column_name": "description",
+    "data_type": "varchar(250)"
+}, {
+    "column_name": "status",
+    "data_type": "smallint"
+}, {
+    "column_name": "creation_date",
+    "data_type": "timestamp"
+}, {
+    "column_name": "update_date",
+    "data_type": "timestamp"
+}, {
+    "column_name": "price",
+    "data_type": "int(10)"
+}, {
+    "column_name": "product_type",
+    "data_type": "varchar(50)"
+}, {
+    "column_name": "brand",
+    "data_type": "varchar(50)"
+}, {
+    "column_name": "subcategory",
+    "data_type": "varchar(100)"
+}, {
+    "column_name": "category",
+    "data_type": "varchar(100)"
+}, {
+    "column_name": "store_id",
+    "data_type": "int(10)"
+}]
