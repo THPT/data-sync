@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 )
 
@@ -14,6 +15,11 @@ func Import(configFile string, rawFile string) {
 	if !util.IsFileExisted(rawFile) {
 		fmt.Println("Can not file raw file:", rawFile)
 		return
+	}
+
+	rawPath, err := filepath.Abs(rawFile)
+	if err != nil {
+		panic(err)
 	}
 
 	// Read table config
@@ -62,7 +68,7 @@ func Import(configFile string, rawFile string) {
 	}
 
 	//TODO should check rawFile is valid tsv or not
-	queryCopy := fmt.Sprintf(`COPY "%s" FROM '%s' DELIMITER '	' CSV;`, tableName, rawFile)
+	queryCopy := fmt.Sprintf(`COPY "%s" FROM '%s' DELIMITER '	' CSV;`, tableName, rawPath)
 	fmt.Println(queryCopy)
 	_, err = tx.Exec(queryCopy)
 	if err != nil {
