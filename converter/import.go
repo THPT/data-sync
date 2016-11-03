@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 func Import(configFile string, rawFile string) {
@@ -38,6 +39,11 @@ func Import(configFile string, rawFile string) {
 	if err != nil {
 		panic(err)
 	}
+	tx, err := desDb.Beginx()
+	if err != nil {
+		tx.Rollback()
+		panic(err)
+	}
 
 	var table structure.TableStructure
 	err = json.Unmarshal(file, &table)
@@ -53,13 +59,12 @@ func Import(configFile string, rawFile string) {
 	for i, col := range columns {
 		columnStrs[i] = fmt.Sprintf(`"%s" %s`, col.ColumnName, col.DataType)
 	}
-	queryCreateTable := fmt.Sprintf(`CREATE TABLE "%s" ( %s );`, tableName, strings.Join(columnStrs, ", "))
+
+	newTable := tableName + "_" + fmt.Sprint(time.Now().Unix())
+	queryCreateTable := fmt.Sprintf(`CREATE TABLE "%s" ( %s );`, newTable, strings.Join(columnStrs, ", "))
+	fmt.Println("-- Create new table")
 	fmt.Println(queryCreateTable)
-	tx, err := desDb.Beginx()
-	if err != nil {
-		tx.Rollback()
-		panic(err)
-	}
+
 	res, err := tx.Exec(queryCreateTable)
 	if err != nil {
 		fmt.Println(res)
@@ -67,10 +72,31 @@ func Import(configFile string, rawFile string) {
 		panic(err)
 	}
 
+	fmt.Println("-- Copy data")
 	//TODO should check rawFile is valid tsv or not
-	queryCopy := fmt.Sprintf(`COPY "%s" FROM '%s' DELIMITER '	' CSV;`, tableName, rawPath)
+	queryCopy := fmt.Sprintf(`COPY "%s" FROM '%s' DELIMITER '	' CSV;`, newTable, rawPath)
 	fmt.Println(queryCopy)
 	_, err = tx.Exec(queryCopy)
+	if err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+
+	//Rename exist table
+	queryRenameTable := fmt.Sprintf(`ALTER TABLE IF EXISTS "%s" RENAME TO "%s"`, tableName, tableName+"_backup_"+fmt.Sprint(time.Now().Unix()))
+	fmt.Println("-- Rename old table")
+	fmt.Println(queryRenameTable)
+	_, err = tx.Exec(queryRenameTable)
+	if err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+
+	// Swap to new table
+	querySwapTable := fmt.Sprintf(`ALTER TABLE "%s" RENAME TO "%s"`, newTable, tableName)
+	fmt.Println("-- Swap to new table")
+	fmt.Println(querySwapTable)
+	_, err = tx.Exec(querySwapTable)
 	if err != nil {
 		tx.Rollback()
 		panic(err)
