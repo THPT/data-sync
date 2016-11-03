@@ -2,6 +2,7 @@ package converter
 
 import (
 	"data-sync/structure"
+	"data-sync/util"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -16,17 +17,23 @@ const (
 	delimiter = rune('	')
 )
 
-func Export(tableName string) {
-	// Read table config
-	file, err := ioutil.ReadFile(fmt.Sprintf("./config/tables/%s.json", tableName))
+func Export(configFile string) {
+	tableName, err := util.GetTableName(configFile)
 	if err != nil {
-		fmt.Println("Can not find table config")
+		fmt.Println(err)
+		return
+	}
+
+	// Read table config
+	file, err := ioutil.ReadFile(configFile)
+	if err != nil {
+		fmt.Println("Can not find config file:", err)
 		return
 	}
 
 	srcDb, err := openConnection(actionExport)
 	if err != nil {
-		fmt.Println("Can not connect to MySQL")
+		fmt.Println("Can not connect to MySQL:", err)
 		panic(err)
 	}
 	defer srcDb.Close()
@@ -36,7 +43,11 @@ func Export(tableName string) {
 	}
 
 	var columns []structure.ColumnStructure
-	json.Unmarshal(file, &columns)
+	err = json.Unmarshal(file, &columns)
+	if err != nil {
+		fmt.Println("Can not parse config file, err:", err)
+		return
+	}
 
 	//Init writer
 	tsvWriter := csv.NewWriter(os.Stdout)

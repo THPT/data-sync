@@ -2,17 +2,24 @@ package converter
 
 import (
 	"data-sync/structure"
+	"data-sync/util"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"strings"
 )
 
-func Import(tableName string) {
-	// Read table config
-	file, err := ioutil.ReadFile(fmt.Sprintf("./config/tables/%s.json", tableName))
+func Import(configFile string) {
+	tableName, err := util.GetTableName(configFile)
 	if err != nil {
-		fmt.Println("Can not find table config")
+		fmt.Println(err)
+		return
+	}
+
+	// Read table config
+	file, err := ioutil.ReadFile(fmt.Sprintf("./config/tables/%s.json", configFile))
+	if err != nil {
+		fmt.Println("Can not find table config, err:", err)
 		return
 	}
 
@@ -27,7 +34,11 @@ func Import(tableName string) {
 	}
 
 	var columns []structure.ColumnStructure
-	json.Unmarshal(file, &columns)
+	err = json.Unmarshal(file, &columns)
+	if err != nil {
+		fmt.Println("Can not parse config file, err:", err)
+		return
+	}
 
 	// Create table
 	columnStrs := make([]string, len(columns))
