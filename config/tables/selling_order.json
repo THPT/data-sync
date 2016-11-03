@@ -1,22 +1,26 @@
-[{
-    "column_name": "order_id",
-    "data_type": "bigint(20)"
-}, {
-    "column_name": "product_code",
-    "data_type": "varchar(50)"
-}, {
-    "column_name": "customer_id",
-    "data_type": "bigint(20)"
-}, {
-    "column_name": "order_date",
-    "data_type": "datetime"
-}, {
-    "column_name": "quantity",
-    "data_type": "int(11)"
-}, {
-    "column_name": "revenue",
-    "data_type": "bigint(20)"
-}, {
-    "column_name": "discount",
-    "data_type": "float"
-}]
+{
+    "from_table_name": "selling_order",
+    "dest_table_name": "selling_order",
+    "columns": [{
+        "column_name": "order_id",
+        "data_type": "bigint(20)"
+    }, {
+        "column_name": "product_code",
+        "data_type": "varchar(50)"
+    }, {
+        "column_name": "customer_id",
+        "data_type": "bigint(20)"
+    }, {
+        "column_name": "order_date",
+        "data_type": "datetime"
+    }, {
+        "column_name": "quantity",
+        "data_type": "int(11)"
+    }, {
+        "column_name": "revenue",
+        "data_type": "bigint(20)"
+    }, {
+        "column_name": "discount",
+        "data_type": "float"
+    }]
+}

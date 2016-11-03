@@ -1,0 +1,14 @@
+source:
+  type: "mysql"
+  host: "118.69.73.196"
+  port: "3333"
+  user: "team3"
+  password: "HU1r%1710m05n45SJ^10"
+  dbname: "svcdb"
+destination:
+  type: "postgres"
+  host: "127.0.0.1"
+  port: "5432"
+  user: "grok"
+  password: "grok"
+  dbname: "grok"

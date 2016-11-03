@@ -2,7 +2,6 @@ package converter
 
 import (
 	"data-sync/structure"
-	"data-sync/util"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -18,12 +17,6 @@ const (
 )
 
 func Export(configFile string) {
-	tableName, err := util.GetTableName(configFile)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
 	// Read table config
 	file, err := ioutil.ReadFile(configFile)
 	if err != nil {
@@ -42,15 +35,24 @@ func Export(configFile string) {
 		panic(err)
 	}
 
-	var columns []structure.ColumnStructure
-	err = json.Unmarshal(file, &columns)
+	var table structure.TableStructure
+	err = json.Unmarshal(file, &table)
 	if err != nil {
 		fmt.Println("Can not parse config file, err:", err)
 		return
 	}
+	columns := table.Columns
+	tableName := table.FromTableName
+
+	// Output
+	output, err := os.Create(tableName + ".tsv")
+	if err != nil {
+		panic(err)
+	}
+	defer output.Close()
 
 	//Init writer
-	tsvWriter := csv.NewWriter(os.Stdout)
+	tsvWriter := csv.NewWriter(output)
 	tsvWriter.Comma = delimiter
 
 	// Buffer init

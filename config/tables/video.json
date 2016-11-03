@@ -1,31 +1,35 @@
-[{
-    "column_name": "video_id",
-    "data_type": "varchar(50)"
-}, {
-    "column_name": "url",
-    "data_type": "varchar(250)"
-}, {
-    "column_name": "category",
-    "data_type": "varchar(200)"
-}, {
-    "column_name": "title",
-    "data_type": "varchar(1000)"
-}, {
-    "column_name": "description",
-    "data_type": "varchar(2000)"
-}, {
-    "column_name": "thumbnail_image",
-    "data_type": "varchar(250)"
-}, {
-    "column_name": "published_time",
-    "data_type": "datetime NOT "
-}, {
-    "column_name": "channel_id",
-    "data_type": "varchar(50)"
-}, {
-    "column_name": "channel_title",
-    "data_type": "varchar(500)"
-}, {
-    "column_name": "product_id",
-    "data_type": "varchar(50)"
-}]
+{
+    "from_table_name": "video",
+    "dest_table_name": "video",
+    "columns": [{
+        "column_name": "video_id",
+        "data_type": "varchar(50)"
+    }, {
+        "column_name": "url",
+        "data_type": "varchar(250)"
+    }, {
+        "column_name": "category",
+        "data_type": "varchar(200)"
+    }, {
+        "column_name": "title",
+        "data_type": "varchar(1000)"
+    }, {
+        "column_name": "description",
+        "data_type": "varchar(2000)"
+    }, {
+        "column_name": "thumbnail_image",
+        "data_type": "varchar(250)"
+    }, {
+        "column_name": "published_time",
+        "data_type": "datetime NOT "
+    }, {
+        "column_name": "channel_id",
+        "data_type": "varchar(50)"
+    }, {
+        "column_name": "channel_title",
+        "data_type": "varchar(500)"
+    }, {
+        "column_name": "product_id",
+        "data_type": "varchar(50)"
+    }]
+}

@@ -1,25 +1,29 @@
-[{
-    "column_name": "user_id",
-    "data_type": "bigint"
-}, {
-    "column_name": "name",
-    "data_type": "text"
-}, {
-    "column_name": "email",
-    "data_type": "text"
-}, {
-    "column_name": "age",
-    "data_type": "smallint"
-}, {
-    "column_name": "gender",
-    "data_type": "smallint"
-}, {
-    "column_name": "location",
-    "data_type": "text"
-}, {
-    "column_name": "creation_date",
-    "data_type": "timestamp"
-}, {
-    "column_name": "modification",
-    "data_type": "timestamp"
-}]
+{
+    "from_table_name": "user",
+    "dest_table_name": "user",
+    "columns": [{
+        "column_name": "user_id",
+        "data_type": "bigint"
+    }, {
+        "column_name": "name",
+        "data_type": "text"
+    }, {
+        "column_name": "email",
+        "data_type": "text"
+    }, {
+        "column_name": "age",
+        "data_type": "smallint"
+    }, {
+        "column_name": "gender",
+        "data_type": "smallint"
+    }, {
+        "column_name": "location",
+        "data_type": "text"
+    }, {
+        "column_name": "creation_date",
+        "data_type": "timestamp"
+    }, {
+        "column_name": "modification",
+        "data_type": "timestamp"
+    }]
+}

@@ -24,7 +24,13 @@ func main() {
 
 	switch action {
 	case "import":
-		converter.Import(configFile)
+		if len(args) < 3 {
+			fmt.Println("Missing resource file")
+			fmt.Println("data-sync import <config.json> <resource.tsv>")
+			return
+		}
+
+		converter.Import(configFile, args[2])
 	case "export":
 		converter.Export(configFile)
 	default:

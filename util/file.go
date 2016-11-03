@@ -1,29 +1,14 @@
 package util
 
-import (
-	"errors"
-	"os"
-	"strings"
-)
+import "os"
 
-func GetTableName(configFile string) (string, error) {
-	f, err := os.Open(configFile)
-	if err != nil {
-		return "", err
+func IsFileExisted(path string) bool {
+	stat, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		return false
 	}
-
-	filePath := f.Name()
-	fileName := filePath
-	extensionLen := len(".json")
-
-	if strings.Index(filePath, "/") != -1 {
-		fileName = filePath[strings.LastIndex(filePath, "/")+1:]
+	if stat.IsDir() {
+		return false
 	}
-
-	//no path
-	if len(fileName) < extensionLen || fileName[len(fileName)-extensionLen:] != ".json" {
-		return "", errors.New("Invalid file")
-	}
-
-	return fileName[:len(fileName)-extensionLen], nil
+	return true
 }

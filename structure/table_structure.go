@@ -1,7 +1,9 @@
 package structure
 
 type TableStructure struct {
-	Columns []ColumnStructure `json:"columns"`
+	FromTableName string            `json:"from_table_name"`
+	DestTableName string            `json:"dest_table_name"`
+	Columns       []ColumnStructure `json:"columns"`
 }
 
 type ColumnStructure struct {

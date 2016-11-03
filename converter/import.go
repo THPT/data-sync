@@ -9,15 +9,15 @@ import (
 	"strings"
 )
 
-func Import(configFile string) {
-	tableName, err := util.GetTableName(configFile)
-	if err != nil {
-		fmt.Println(err)
+func Import(configFile string, rawFile string) {
+	//TODO should check rawFile is valid tsv or not
+	if !util.IsFileExisted(rawFile) {
+		fmt.Println("Can not file raw file:", rawFile)
 		return
 	}
 
 	// Read table config
-	file, err := ioutil.ReadFile(fmt.Sprintf("./config/tables/%s.json", configFile))
+	file, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		fmt.Println("Can not find table config, err:", err)
 		return
@@ -33,12 +33,14 @@ func Import(configFile string) {
 		panic(err)
 	}
 
-	var columns []structure.ColumnStructure
-	err = json.Unmarshal(file, &columns)
+	var table structure.TableStructure
+	err = json.Unmarshal(file, &table)
 	if err != nil {
 		fmt.Println("Can not parse config file, err:", err)
 		return
 	}
+	columns := table.Columns
+	tableName := table.DestTableName
 
 	// Create table
 	columnStrs := make([]string, len(columns))
@@ -59,7 +61,8 @@ func Import(configFile string) {
 		panic(err)
 	}
 
-	queryCopy := fmt.Sprintf(`COPY "%s" FROM '%s' DELIMITER '	' CSV;`, tableName, "/Users/mac/projects/go/src/data-sync/output.tsv")
+	//TODO should check rawFile is valid tsv or not
+	queryCopy := fmt.Sprintf(`COPY "%s" FROM '%s' DELIMITER '	' CSV;`, tableName, rawFile)
 	fmt.Println(queryCopy)
 	_, err = tx.Exec(queryCopy)
 	if err != nil {
