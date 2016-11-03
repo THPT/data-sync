@@ -38,3 +38,4 @@ config/config.yaml
 ```
 
 Update connection configuration in `config.yaml`
+Supported Postgres (`postgres`) and MySQL (`mysql`)

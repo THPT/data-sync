@@ -6,9 +6,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/jmoiron/sqlx"
 )
 
 func Import(configFile string, rawFile string) {
@@ -39,6 +42,104 @@ func Import(configFile string, rawFile string) {
 	if err != nil {
 		panic(err)
 	}
+
+	switch config.Destination.Type {
+	case "postgres":
+		importPostgres(desDb, file, rawPath)
+	case "mysql":
+		importMySQL(desDb, file, rawPath)
+	default:
+		fmt.Println("Invalid DB")
+		return
+	}
+
+	fmt.Print("\nALL DONE\n")
+}
+
+func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
+	tx, err := desDb.Beginx()
+	if err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+
+	var table structure.TableStructure
+	err = json.Unmarshal(file, &table)
+	if err != nil {
+		fmt.Println("Can not parse config file, err:", err)
+		return
+	}
+	columns := table.Columns
+	tableName := table.DestTableName
+
+	// Create table
+	columnStrs := make([]string, len(columns))
+	for i, col := range columns {
+		columnStrs[i] = fmt.Sprintf("`%s` %s", col.ColumnName, col.DataType)
+	}
+
+	newTable := tableName + "_" + fmt.Sprint(time.Now().Unix())
+	queryCreateTable := fmt.Sprintf("CREATE TABLE  `%s` ( %s );", newTable, strings.Join(columnStrs, ", "))
+	fmt.Println("-- Create new table")
+	fmt.Println(queryCreateTable)
+
+	res, err := tx.Exec(queryCreateTable)
+	if err != nil {
+		fmt.Println(res)
+		tx.Rollback()
+		panic(err)
+	}
+
+	stat, err := os.Stat(rawPath)
+	if err == nil {
+		if stat.Size() > 0 {
+
+			fmt.Println("-- Copy data")
+			//TODO should check rawFile is valid tsv or not
+			queryCopy := fmt.Sprintf("LOAD DATA LOCAL INFILE '%s' INTO TABLE `%s`;", rawPath, newTable)
+			fmt.Println(queryCopy)
+			_, err = tx.Exec(queryCopy)
+			if err != nil {
+				tx.Rollback()
+				panic(err)
+			}
+		}
+	}
+
+	//CREATE DEFAULT TABLE BEFORE
+	queryDefaultTable := fmt.Sprintf("CREATE TABLE IF NOT EXISTS `%s`(id int)", tableName)
+	fmt.Println("--Create default table")
+	fmt.Println(queryDefaultTable)
+	_, err = tx.Exec(queryDefaultTable)
+	if err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+
+	//Rename exist table
+	queryRenameTable := fmt.Sprintf("RENAME TABLE `%s` TO `%s`", tableName, tableName+"_backup_"+fmt.Sprint(time.Now().Unix()))
+	fmt.Println("-- Rename old table")
+	fmt.Println(queryRenameTable)
+	_, err = tx.Exec(queryRenameTable)
+	if err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+
+	// Swap to new table
+	querySwapTable := fmt.Sprintf("RENAME TABLE `%s` TO `%s`", newTable, tableName)
+	fmt.Println("-- Swap to new table")
+	fmt.Println(querySwapTable)
+	_, err = tx.Exec(querySwapTable)
+	if err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+
+	tx.Commit()
+}
+
+func importPostgres(desDb *sqlx.DB, file []byte, rawPath string) {
 	tx, err := desDb.Beginx()
 	if err != nil {
 		tx.Rollback()
@@ -103,6 +204,4 @@ func Import(configFile string, rawFile string) {
 	}
 
 	tx.Commit()
-
-	fmt.Print("\nALL DONE\n")
 }

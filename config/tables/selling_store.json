@@ -3,15 +3,15 @@
     "dest_table_name": "selling_store",
     "columns": [{
         "column_name": "store_id",
-        "data_type": "bigint"
+        "data_type": "bigint(20) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT"
     }, {
         "column_name": "name",
-        "data_type": "varchar(500)"
+        "data_type": "varchar(500) COLLATE utf8_unicode_ci NOT NULL"
     }, {
         "column_name": "user_id",
-        "data_type": "bigint"
+        "data_type": "bigint(20) NOT NULL"
     }, {
         "column_name": "location",
-        "data_type": "varchar(1000)"
+        "data_type": "varchar(1000) COLLATE utf8_unicode_ci NOT NULL"
     }]
 }

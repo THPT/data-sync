@@ -3,27 +3,27 @@
     "dest_table_name": "user",
     "columns": [{
         "column_name": "user_id",
-        "data_type": "bigint"
+        "data_type": "bigint(20) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT"
     }, {
         "column_name": "name",
-        "data_type": "text"
+        "data_type": "varchar(200) COLLATE utf8_unicode_ci NOT NULL"
     }, {
         "column_name": "email",
-        "data_type": "text"
+        "data_type": "varchar(200) COLLATE utf8_unicode_ci NOT NULL"
     }, {
         "column_name": "age",
-        "data_type": "smallint"
+        "data_type": "tinyint(3) unsigned NOT NULL"
     }, {
         "column_name": "gender",
-        "data_type": "smallint"
+        "data_type": "tinyint(3) unsigned NOT NULL"
     }, {
         "column_name": "location",
-        "data_type": "text"
+        "data_type": "varchar(300) COLLATE utf8_unicode_ci NOT NULL"
     }, {
         "column_name": "creation_date",
-        "data_type": "timestamp with time zone"
+        "data_type": "datetime NOT NULL"
     }, {
         "column_name": "modification",
-        "data_type": "timestamp with time zone"
+        "data_type": "datetime NOT NULL"
     }]
 }

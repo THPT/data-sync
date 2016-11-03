@@ -3,24 +3,24 @@
     "dest_table_name": "selling_order",
     "columns": [{
         "column_name": "order_id",
-        "data_type": "bigint"
+        "data_type": "bigint(20) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT"
     }, {
         "column_name": "product_code",
-        "data_type": "varchar(50)"
+        "data_type": "varchar(50) COLLATE utf8_unicode_ci NOT NULL"
     }, {
         "column_name": "customer_id",
-        "data_type": "bigint"
+        "data_type": "bigint(20) NOT NULL"
     }, {
         "column_name": "order_date",
-        "data_type": "timestamp with time zone"
+        "data_type": "datetime NOT NULL"
     }, {
         "column_name": "quantity",
-        "data_type": "int"
+        "data_type": "int(11) NOT NULL"
     }, {
         "column_name": "revenue",
-        "data_type": "bigint"
+        "data_type": "bigint(20) NOT NULL"
     }, {
         "column_name": "discount",
-        "data_type": "float"
+        "data_type": "float NOT NULL"
     }]
 }

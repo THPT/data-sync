@@ -3,33 +3,33 @@
     "dest_table_name": "video",
     "columns": [{
         "column_name": "video_id",
-        "data_type": "varchar(50)"
+        "data_type": "varchar(50) COLLATE utf8_unicode_ci NOT NULL"
     }, {
         "column_name": "url",
-        "data_type": "varchar(250)"
+        "data_type": "varchar(250) COLLATE utf8_unicode_ci NOT NULL"
     }, {
         "column_name": "category",
-        "data_type": "varchar(200)"
+        "data_type": "varchar(200) COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
     }, {
         "column_name": "title",
-        "data_type": "varchar(1000)"
+        "data_type": "varchar(1000) COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
     }, {
         "column_name": "description",
-        "data_type": "varchar(2000)"
+        "data_type": "varchar(2000) COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
     }, {
         "column_name": "thumbnail_image",
-        "data_type": "varchar(250)"
+        "data_type": "varchar(250) COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
     }, {
         "column_name": "published_time",
-        "data_type": "timestamp with time zone"
+        "data_type": "datetime NOT NULL"
     }, {
         "column_name": "channel_id",
-        "data_type": "varchar(50)"
+        "data_type": "varchar(50) CHARACTER SET utf8 NOT NULL"
     }, {
         "column_name": "channel_title",
-        "data_type": "varchar(500)"
+        "data_type": "varchar(500) CHARACTER SET utf8 NOT NULL"
     }, {
         "column_name": "product_id",
-        "data_type": "varchar(50)"
+        "data_type": "varchar(50) COLLATE utf8_unicode_ci NOT NULL"
     }]
 }
