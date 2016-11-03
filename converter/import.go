@@ -103,4 +103,6 @@ func Import(configFile string, rawFile string) {
 	}
 
 	tx.Commit()
+
+	fmt.Print("\nALL DONE\n")
 }

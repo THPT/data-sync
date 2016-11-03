@@ -21,9 +21,9 @@
         "data_type": "text"
     }, {
         "column_name": "creation_date",
-        "data_type": "timestamp"
+        "data_type": "timestamp with time zone"
     }, {
         "column_name": "modification",
-        "data_type": "timestamp"
+        "data_type": "timestamp with time zone"
     }]
 }

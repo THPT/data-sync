@@ -21,7 +21,7 @@
         "data_type": "varchar(250)"
     }, {
         "column_name": "published_time",
-        "data_type": "datetime NOT "
+        "data_type": "timestamp with time zone"
     }, {
         "column_name": "channel_id",
         "data_type": "varchar(50)"

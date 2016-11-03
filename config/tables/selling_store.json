@@ -3,13 +3,13 @@
     "dest_table_name": "selling_store",
     "columns": [{
         "column_name": "store_id",
-        "data_type": "bigint(20)"
+        "data_type": "bigint"
     }, {
         "column_name": "name",
         "data_type": "varchar(500)"
     }, {
         "column_name": "user_id",
-        "data_type": "bigint(20)"
+        "data_type": "bigint"
     }, {
         "column_name": "location",
         "data_type": "varchar(1000)"

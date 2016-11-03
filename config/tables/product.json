@@ -15,13 +15,13 @@
         "data_type": "smallint"
     }, {
         "column_name": "creation_time",
-        "data_type": "timestamp"
+        "data_type": "timestamp with time zone"
     }, {
         "column_name": "update_time",
-        "data_type": "timestamp"
+        "data_type": "timestamp with time zone"
     }, {
         "column_name": "price",
-        "data_type": "int(10)"
+        "data_type": "int"
     }, {
         "column_name": "product_type",
         "data_type": "varchar(50)"
@@ -36,6 +36,6 @@
         "data_type": "varchar(100)"
     }, {
         "column_name": "store_id",
-        "data_type": "int(10)"
+        "data_type": "int"
     }]
 }
