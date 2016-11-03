@@ -14,10 +14,10 @@
         "column_name": "status",
         "data_type": "smallint"
     }, {
-        "column_name": "creation_date",
+        "column_name": "creation_time",
         "data_type": "timestamp"
     }, {
-        "column_name": "update_date",
+        "column_name": "update_time",
         "data_type": "timestamp"
     }, {
         "column_name": "price",
