@@ -44,17 +44,6 @@ func Export(configFile string) {
 	columns := table.Columns
 	tableName := table.FromTableName
 
-	// Output
-	output, err := os.Create(tableName + ".tsv")
-	if err != nil {
-		panic(err)
-	}
-	defer output.Close()
-
-	//Init writer
-	tsvWriter := csv.NewWriter(output)
-	tsvWriter.Comma = delimiter
-
 	// Buffer init
 	var values = make([]interface{}, len(columns))
 	for i, _ := range values {
@@ -82,6 +71,17 @@ func Export(configFile string) {
 		tx.Rollback()
 		return
 	}
+
+	// Output
+	output, err := os.Create(tableName + ".tsv")
+	if err != nil {
+		panic(err)
+	}
+	defer output.Close()
+
+	//Init writer
+	tsvWriter := csv.NewWriter(output)
+	tsvWriter.Comma = delimiter
 
 	// count := 0
 	for rows.Next() {
