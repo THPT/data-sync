@@ -82,6 +82,7 @@ func Export(configFile string) {
 	//Init writer
 	tsvWriter := csv.NewWriter(output)
 	tsvWriter.Comma = delimiter
+	tsvWriter.UseCRLF = true
 
 	// count := 0
 	for rows.Next() {

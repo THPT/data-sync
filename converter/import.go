@@ -96,7 +96,7 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 
 			fmt.Println("-- Copy data")
 			//TODO should check rawFile is valid tsv or not
-			queryCopy := fmt.Sprintf("LOAD DATA LOCAL INFILE '%s' INTO TABLE `%s` CHARACTER SET UTF8;", rawPath, newTable)
+			queryCopy := fmt.Sprintf("LOAD DATA LOCAL INFILE '%s' INTO TABLE `%s` CHARACTER SET UTF8 FIELDS TERMINATED BY '\\t' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\\r\\n';", rawPath, newTable)
 			fmt.Println(queryCopy)
 			_, err = tx.Exec(queryCopy)
 			if err != nil {
