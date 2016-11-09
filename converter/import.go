@@ -141,6 +141,7 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 						tx.Rollback()
 						panic(err)
 					}
+					values = []string{}
 					fmt.Println(count)
 				}
 			}
