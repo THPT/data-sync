@@ -6,7 +6,7 @@
         "data_type": "bigint(20) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT"
     }, {
         "column_name": "product_id",
-        "data_type": "varchar(50) COLLATE utf8_unicode_ci NOT NULL"
+        "data_type": "varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL"
     }, {
         "column_name": "customer_id",
         "data_type": "bigint(20) NOT NULL"

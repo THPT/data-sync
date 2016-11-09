@@ -3,13 +3,13 @@
     "dest_table_name": "product",
     "columns": [{
         "column_name": "product_id",
-        "data_type": "varchar(50) COLLATE utf8_unicode_ci NOT NULL"
+        "data_type": "varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL"
     }, {
         "column_name": "name",
-        "data_type": "varchar(250) COLLATE utf8_unicode_ci NOT NULL"
+        "data_type": "varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL"
     }, {
         "column_name": "description",
-        "data_type": "varchar(250) COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
+        "data_type": "varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''"
     }, {
         "column_name": "status",
         "data_type": "smallint(5) unsigned NOT NULL"
@@ -24,16 +24,16 @@
         "data_type": "int(10) unsigned NOT NULL"
     }, {
         "column_name": "product_type",
-        "data_type": "varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
+        "data_type": "varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''"
     }, {
         "column_name": "brand",
-        "data_type": "varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
+        "data_type": "varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''"
     }, {
         "column_name": "subcategory",
-        "data_type": "varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
+        "data_type": "varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''"
     }, {
         "column_name": "category",
-        "data_type": "varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT ''"
+        "data_type": "varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''"
     }, {
         "column_name": "store_id",
         "data_type": "int(10) unsigned NOT NULL"

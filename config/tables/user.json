@@ -6,10 +6,10 @@
         "data_type": "bigint(20) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT"
     }, {
         "column_name": "name",
-        "data_type": "varchar(200) COLLATE utf8_unicode_ci NOT NULL"
+        "data_type": "varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL"
     }, {
         "column_name": "email",
-        "data_type": "varchar(200) COLLATE utf8_unicode_ci NOT NULL"
+        "data_type": "varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL"
     }, {
         "column_name": "age",
         "data_type": "tinyint(3) unsigned NOT NULL"
@@ -18,7 +18,7 @@
         "data_type": "tinyint(3) unsigned NOT NULL"
     }, {
         "column_name": "location",
-        "data_type": "varchar(300) COLLATE utf8_unicode_ci NOT NULL"
+        "data_type": "varchar(300) COLLATE utf8mb4_unicode_ci NOT NULL"
     }, {
         "column_name": "creation_date",
         "data_type": "datetime NOT NULL"

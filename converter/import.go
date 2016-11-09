@@ -78,8 +78,14 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 		columnStrs[i] = fmt.Sprintf("`%s` %s", col.ColumnName, col.DataType)
 	}
 
+	_, err = tx.Exec(`set names utf8mb4;`)
+	if err != nil {
+		tx.Rollback()
+		panic(err)
+	}
+
 	newTable := tableName + "_" + fmt.Sprint(time.Now().Unix())
-	queryCreateTable := fmt.Sprintf("CREATE TABLE  `%s` ( %s );", newTable, strings.Join(columnStrs, ", "))
+	queryCreateTable := fmt.Sprintf("CREATE TABLE  `%s` ( %s ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;", newTable, strings.Join(columnStrs, ", "))
 	fmt.Println("-- Create new table")
 	fmt.Println(queryCreateTable)
 
@@ -96,7 +102,7 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 
 			fmt.Println("-- Copy data")
 			//TODO should check rawFile is valid tsv or not
-			queryCopy := fmt.Sprintf("LOAD DATA LOCAL INFILE '%s' INTO TABLE `%s` CHARACTER SET UTF8 FIELDS TERMINATED BY '\\t' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\\r\\n';", rawPath, newTable)
+			queryCopy := fmt.Sprintf("LOAD DATA LOCAL INFILE '%s' INTO TABLE `%s` CHARACTER SET utf8mb4 FIELDS TERMINATED BY '\\t' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\\r\\n';", rawPath, newTable)
 			fmt.Println(queryCopy)
 			_, err = tx.Exec(queryCopy)
 			if err != nil {
@@ -107,7 +113,7 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 	}
 
 	//CREATE DEFAULT TABLE BEFORE
-	queryDefaultTable := fmt.Sprintf("CREATE TABLE IF NOT EXISTS `%s`(id int)", tableName)
+	queryDefaultTable := fmt.Sprintf("CREATE TABLE IF NOT EXISTS `%s`(id int) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;", tableName)
 	fmt.Println("--Create default table")
 	fmt.Println(queryDefaultTable)
 	_, err = tx.Exec(queryDefaultTable)
