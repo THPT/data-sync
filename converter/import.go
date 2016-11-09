@@ -117,6 +117,7 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 			f, _ := os.Open(rawPath)
 			r := csv.NewReader(bufio.NewReader(f))
 			r.Comma = delimiter
+			count := 0
 			for {
 				record, err := r.Read()
 				// Stop at EOF.
@@ -134,6 +135,10 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 					fmt.Println(query)
 					tx.Rollback()
 					panic(err)
+				}
+				count++
+				if count%5000 == 0 {
+					fmt.Println(count)
 				}
 			}
 
