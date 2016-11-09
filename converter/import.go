@@ -118,6 +118,8 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 			r := csv.NewReader(bufio.NewReader(f))
 			r.Comma = delimiter
 			count := 0
+			query := "INSERT INTO `%s` (%s) VALUES %s;"
+			var values []string
 			for {
 				record, err := r.Read()
 				// Stop at EOF.
@@ -128,16 +130,17 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 					record[i] = "'" + strings.Replace(record[i], "'", "\\'", -1) + "'"
 				}
 
-				query := fmt.Sprintf("INSERT INTO `%s` (%s) VALUES (%s);", newTable, strings.Join(columnNames, ", "), strings.Join(record, ", "))
-				res, err = tx.Exec(query)
-				if err != nil {
-					fmt.Println(res)
-					fmt.Println(query)
-					tx.Rollback()
-					panic(err)
-				}
+				values = append(values, "("+strings.Join(record, ", ")+")")
+
 				count++
-				if count%5000 == 0 {
+				if count%1000 == 0 {
+					q := fmt.Sprintf(query, tableName, strings.Join(columnNames, ","), strings.Join(values, ","))
+					res, err = tx.Exec(q)
+					if err != nil {
+						fmt.Println(res)
+						tx.Rollback()
+						panic(err)
+					}
 					fmt.Println(count)
 				}
 			}
