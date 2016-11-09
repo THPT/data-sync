@@ -134,7 +134,7 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 
 				count++
 				if count%1000 == 0 {
-					q := fmt.Sprintf(query, tableName, strings.Join(columnNames, ","), strings.Join(values, ","))
+					q := fmt.Sprintf(query, newTable, strings.Join(columnNames, ","), strings.Join(values, ","))
 					res, err = tx.Exec(q)
 					if err != nil {
 						fmt.Println(res)
