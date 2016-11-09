@@ -1,10 +1,13 @@
 package converter
 
 import (
+	"bufio"
 	"data-sync/structure"
 	"data-sync/util"
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -74,7 +77,9 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 
 	// Create table
 	columnStrs := make([]string, len(columns))
+	columnNames := make([]string, len(columns))
 	for i, col := range columns {
+		columnNames[i] = col.ColumnName
 		columnStrs[i] = fmt.Sprintf("`%s` %s", col.ColumnName, col.DataType)
 	}
 
@@ -85,7 +90,7 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 	}
 
 	newTable := tableName + "_" + fmt.Sprint(time.Now().Unix())
-	queryCreateTable := fmt.Sprintf("CREATE TABLE  `%s` ( %s ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;", newTable, strings.Join(columnStrs, ", "))
+	queryCreateTable := fmt.Sprintf("CREATE TABLE  `%s` ( %s ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;", newTable, strings.Join(columnStrs, ", "))
 	fmt.Println("-- Create new table")
 	fmt.Println(queryCreateTable)
 
@@ -99,16 +104,39 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 	stat, err := os.Stat(rawPath)
 	if err == nil {
 		if stat.Size() > 0 {
-
 			fmt.Println("-- Copy data")
 			//TODO should check rawFile is valid tsv or not
-			queryCopy := fmt.Sprintf("LOAD DATA LOCAL INFILE '%s' INTO TABLE `%s` CHARACTER SET utf8mb4 FIELDS TERMINATED BY '\\t' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\\r\\n';", rawPath, newTable)
-			fmt.Println(queryCopy)
-			_, err = tx.Exec(queryCopy)
-			if err != nil {
-				tx.Rollback()
-				panic(err)
+
+			// queryCopy := fmt.Sprintf("LOAD DATA LOCAL INFILE '%s' INTO TABLE `%s` CHARACTER SET utf8mb4 FIELDS TERMINATED BY '\\t' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\\r\\n';", rawPath, newTable)
+			// fmt.Println(queryCopy)
+			// _, err = tx.Exec(queryCopy)
+			// if err != nil {
+			// 	tx.Rollback()
+			// 	panic(err)
+			// }
+			f, _ := os.Open(rawPath)
+			r := csv.NewReader(bufio.NewReader(f))
+			r.Comma = delimiter
+			for {
+				record, err := r.Read()
+				// Stop at EOF.
+				if err == io.EOF {
+					break
+				}
+				for i := range record {
+					record[i] = "'" + strings.Replace(record[i], "'", "\\'", -1) + "'"
+				}
+
+				query := fmt.Sprintf("INSERT INTO `%s` (%s) VALUES (%s);", newTable, strings.Join(columnNames, ", "), strings.Join(record, ", "))
+				res, err = tx.Exec(query)
+				if err != nil {
+					fmt.Println(res)
+					fmt.Println(query)
+					tx.Rollback()
+					panic(err)
+				}
 			}
+
 		}
 	}
 

@@ -64,7 +64,7 @@ func openConnection(action string) (*sqlx.DB, error) {
 	connectionString := ""
 	switch conf.Type {
 	case "mysql":
-		connectionString = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?allowAllFiles=true", conf.User, conf.Password, conf.Host, conf.Port, conf.DBName)
+		connectionString = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?allowAllFiles=true&charset=utf8mb4", conf.User, conf.Password, conf.Host, conf.Port, conf.DBName)
 	case "postgres":
 		connectionString = fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable", conf.User, conf.Password, conf.Host, conf.Port, conf.DBName)
 	default:
