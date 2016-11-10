@@ -145,6 +145,17 @@ func importMySQL(desDb *sqlx.DB, file []byte, rawPath string) {
 					fmt.Println(count)
 				}
 			}
+			if count > 0 {
+				q := fmt.Sprintf(query, newTable, strings.Join(columnNames, ","), strings.Join(values, ","))
+				res, err = tx.Exec(q)
+				if err != nil {
+					fmt.Println(res)
+					tx.Rollback()
+					panic(err)
+				}
+				values = []string{}
+				fmt.Println(count)
+			}
 
 		}
 	}
