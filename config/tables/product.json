@@ -3,7 +3,7 @@
     "dest_table_name": "product",
     "columns": [{
         "column_name": "product_id",
-        "data_type": "varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL"
+        "data_type": "varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL PRIMARY KEY"
     }, {
         "column_name": "name",
         "data_type": "varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL"
